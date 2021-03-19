@@ -1,0 +1,30 @@
+
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div style="width: 500px;">
+    <a style="text-decoration: none; color: black;" href="{% pageurl obj %}" >
+        <h1 style="text-align: center;">{{ obj.title }}</h1>
+    </a>
+
+    <div style="text-align: center;">
+    {% if obj.go_live_at %}
+        <span >{{ obj.go_live_at|date:"d M Y" }}</span>
+    {% else %}
+        <span >{{ obj.first_published_at|date:"d M Y" }}</span>
+    {% endif %}
+        <span> / </span>
+        <span >{{ obj.owner.get_full_name }}</span>
+    </div>
+
+    {% if obj.specific.image %}
+    {% image obj.specific.image width-500 as 500_photo %}
+    <img style="margin: 1em 0;" src="{{ 500_photo.url }}" alt="{{ 500_photo.alt }}" loading="lazy" />
+    {% endif %}
+
+    {% if obj.search_description %}
+    <div >{{ obj.search_description|richtext }}</div>
+    {% endif %}
+
+</div>
+

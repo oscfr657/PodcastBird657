@@ -1,0 +1,12 @@
+
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div >
+
+    {% if obj.search_description %}
+    <div >{{ obj.search_description|richtext }}</div>
+    {% endif %}
+
+</div>
+

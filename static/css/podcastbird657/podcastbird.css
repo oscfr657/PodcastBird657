@@ -1,0 +1,193 @@
+
+.content {
+    margin: 0 auto;
+    width: 900px;
+    max-width: calc(100vw - 2em);
+}
+
+.content h1,
+.content img,
+.content .meta,
+.content .intro {
+    display: block;
+    padding: 0em 0;
+    width: 900px;
+    max-width: 100%;
+    margin: auto;
+}
+.content .intro {
+    margin: 0em auto 1em auto;
+}
+.content h1 {
+    padding: 1rem 0 0 0;
+}
+.content .meta {
+    padding: 1em 0;
+    text-align: center;
+}
+
+.breadcrumbs {
+    margin: 1em auto 0 auto;
+    width: var(--content-width);
+    max-width: 100%;
+}
+.breadcrumbs a {
+    text-decoration: none;
+}
+
+
+.content .block-paragraph {
+    width: 100%;
+    margin: 1em auto;
+    max-width: 100%;
+}
+.content .block-paragraph .rich-text > h2,
+.content .block-paragraph .rich-text > h3,
+.content .block-paragraph .rich-text > h4,
+.content .block-paragraph .rich-text > h5,
+.content .block-paragraph .rich-text > h6,
+.content .block-paragraph .rich-text > p,
+.content .block-paragraph .rich-text > blockquote,
+.content .block-paragraph .rich-text > img,
+.content .block-paragraph .rich-text > iframe,
+.content .block-paragraph .rich-text > ol,
+.content .block-paragraph .rich-text > ul {
+    padding: 0em 0;
+    width: 900px;
+    max-width: 100%;
+    margin: auto;
+}
+.content .block-paragraph .rich-text > h2,
+.content .block-paragraph .rich-text > h3,
+.content .block-paragraph .rich-text > h4,
+.content .block-paragraph .rich-text > h5,
+.content .block-paragraph .rich-text > h6 {
+    margin: 0.5em auto;
+}
+.content .block-paragraph .rich-text > ul {
+    padding: revert;
+}
+.content .block-paragraph .rich-text > img {
+    display: block;
+    width: 1200px;
+}
+.content .block-paragraph > img.richtext-image {
+    width: 500px;
+    margin: 1em 0px;
+}
+
+.content_image {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    color: white;
+    background-color: #000000;
+}
+.content_image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.content_image .intro {
+    position: absolute;
+    bottom: 50%;
+    width: 900px;
+    max-width: calc(100% - 2em);
+    text-align: center;
+    margin: auto;
+    left: 0;
+    right: 0;
+    transform: translateY(50%);
+}
+.content_image .intro a {
+    color: white;
+}
+.content_image .intro ul {
+    text-align: left;
+}
+.content .list_page_content > a {
+    text-decoration: none;
+}
+
+.content .list_page_grid {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    margin: 1em 0px;
+}
+.content .page_grid {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-column-gap: 1em;
+}
+.content .list_page_grid .list_page_content .meta,
+.content .list_page_grid .list_page_content .intro {
+    text-align: left;
+    padding: 0;
+}
+.page_audio > audio,
+.list_page_content > audio {
+    width: calc(100% - 1em);
+}
+
+.content ul.paginate {
+    list-style: none;
+    margin: 2em auto;
+    text-align: center;
+    padding: 0;
+}
+.content ul.paginate li {
+    display: inline;
+}
+.content ul.paginate > li.previous > a:nth-child(1) {
+    text-decoration: none;
+    padding: 0 1em;
+}
+.content ul.paginate > li.next > a:nth-child(1) {
+    text-decoration: none;
+    padding: 0 1em;
+    background-color: black;
+    color: white;
+}
+
+
+@media (max-width: 900px) {
+    .content .list_page {
+        border-bottom: none;
+    }
+    .content .list_page_grid {
+        display: block;
+        position: relative;
+    }
+    .content .list_page_image {
+        background-color: black;
+    }
+    .content .list_page_image img {
+        opacity: 0.7;
+    }
+    .content .list_page_content {
+        position: absolute;
+        bottom: 50%;
+        color: white;
+        transform: translateY(50%);
+        max-width: 100%;
+    }
+    .content .list_page_content > a {
+        text-decoration: none;
+        color: white;
+    }
+    .content .list_page_grid .list_page_content .meta,
+    .content .list_page_grid .list_page_content .intro,
+    .content .list_page_content h2 {
+        text-align: center;
+    }
+    .page_audio > audio,
+    .list_page_content > audio {
+        width: 100%;
+    }
+    .content .page_grid {
+        grid-template-columns: 100%;
+        grid-row-gap: 1em;
+    }
+}
