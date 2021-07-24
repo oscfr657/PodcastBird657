@@ -97,7 +97,6 @@ class PodEpisodeBirdPage(Page, BirdMixin):
                 'link', 'document-link',
                 'blockquote', 'embed', 'image'])),
     ], blank=True, null=True)
-
     enclosure = models.ForeignKey(
         'wagtailmedia.Media',
         null=True,
@@ -107,9 +106,7 @@ class PodEpisodeBirdPage(Page, BirdMixin):
     )
     enclosure_length = models.IntegerField(blank=True, null=True)
     enclosure_mime_type = models.CharField(max_length=50, blank=True, null=True)
-
     tags = ClusterTaggableManager(through=PodEpisodeBirdPageTag, blank=True)
-
     search_fields = Page.search_fields + BirdMixin.search_fields + [
         index.SearchField('body'),
     ]
@@ -154,7 +151,7 @@ class PodCastBirdPage(Page, BirdMixin):
         if self.exclude_from_sitemap:
             return []
         else:
-            return super(ListBirdPage, self).get_sitemap_urls(
+            return super(PodCastBirdPage, self).get_sitemap_urls(
                 request=request)
 
     def get_context(self, request):
@@ -182,24 +179,17 @@ class PodCastFeedBirdPageTag(TaggedItemBase):
 
 
 class PodCastFeedBirdPage(Page, BirdMixin):
-
     language = models.CharField(max_length=5, blank=True, null=True)
-
     author_link = models.URLField(blank=True, null=True)
-
     index_page = models.ForeignKey(
         'wagtailcore.Page',
         null=True, blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
-
     tags = ClusterTaggableManager(through=PodCastFeedBirdPageTag, blank=True)
-
     feed_copyright = models.CharField(max_length=128, blank=True, null=True)
-
     search_fields = Page.search_fields + BirdMixin.search_fields
-
     content_panels = Page.content_panels + BirdMixin.content_panels + [
         PageChooserPanel('index_page'),
         FieldPanel('language'),
@@ -210,7 +200,6 @@ class PodCastFeedBirdPage(Page, BirdMixin):
     promote_panels = Page.promote_panels + [
         FieldPanel('tags'),
         ]
-    
     settings_panels = Page.settings_panels + BirdMixin.settings_panels
 
     def serve(self, request):
@@ -221,5 +210,3 @@ class PodCastFeedBirdPage(Page, BirdMixin):
             return []
         else:
             return super(PodCastFeedBirdPage, self).get_sitemap_urls(request=request)
-
-

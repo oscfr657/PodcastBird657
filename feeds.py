@@ -1,6 +1,4 @@
 
-import magic
-
 from django.template.loader import render_to_string
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Rss201rev2Feed
@@ -35,6 +33,7 @@ class CustomRssFeedGenerator(Rss201rev2Feed):
         handler.addQuickElement(u"link", item['link'])
         handler.endElement(u'image')
 
+
 class PodFeed(Feed):
 
     feed_type = CustomRssFeedGenerator
@@ -47,7 +46,6 @@ class PodFeed(Feed):
         self.link = page.specific.index_page.full_url
         self.feed_url = page.full_url
         self.language = str(page.specific.language) if page.specific.language else 'en'
-
 
     def feed_extra_kwargs(self, item):
         return {'image_url': self.page.specific.image.get_rendition('min-1400x1400').file.url, }
@@ -104,33 +102,30 @@ class PodFeed(Feed):
         
     def item_author_email(self, item):
         return item.owner.email
-        
 
     def item_author_link(self, item):
         try:
             return (item.specific.author_link) if item.specific.author_link else '/'
         except AttributeError:
             return '/'
-        
-    
+
     def item_enclosure_url(self, item):
         try:
             return item.get_site().root_url + item.specific.enclosure.file.url
         except:
             return
-    
+
     def item_enclosure_length(self, item):
         try:
             return item.specific.enclosure_length
         except:
             return
-    
+
     def item_enclosure_mime_type(self, item):
         try:
             return item.specific.enclosure_mime_type
         except:
             return
-
 
     def item_pubdate(self, item):
         if item.go_live_at:
