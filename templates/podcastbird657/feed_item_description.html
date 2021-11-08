@@ -1,5 +1,4 @@
 
-
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <div style="width: 500px;">
@@ -26,5 +25,9 @@
     <div >{{ obj.search_description|richtext }}</div>
     {% endif %}
 
-</div>
 
+    {% if obj.specific.body %}
+        {{ obj.specific.body }}
+    {% endif %}
+
+</div>

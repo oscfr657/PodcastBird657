@@ -3,12 +3,15 @@ from django.template.loader import render_to_string
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Rss201rev2Feed
 
+import magic
+
 
 class CustomRssFeedGenerator(Rss201rev2Feed):
     def root_attributes(self):
         attrs = super().root_attributes()
         attrs['xmlns:itunes'] = 'https://www.itunes.com/dtds/podcast-1.0.dtd'
         attrs['xmlns:googleplay'] = 'https://www.google.com/schemas/play-podcasts/1.0'
+        attrs['xmlns:podcast'] = 'https://podcastindex.org/namespace/1.0'
         return attrs
 
     def add_root_elements(self, handler):
@@ -24,6 +27,10 @@ class CustomRssFeedGenerator(Rss201rev2Feed):
         handler.startElement(u'itunes:owner', {})
         handler.addQuickElement(u"itunes:email", self.feed['author_email'])
         handler.endElement(u'itunes:owner')
+
+        handler.startElement(u'podcast', {})
+        handler.addQuickElement(u'locked', self.feed['feed_locked'])
+        handler.endElement(u'podcast')
 
     def add_item_elements(self, handler, item):
         super(CustomRssFeedGenerator, self).add_item_elements(handler, item)
@@ -48,7 +55,10 @@ class PodFeed(Feed):
         self.language = str(page.specific.language) if page.specific.language else 'en'
 
     def feed_extra_kwargs(self, item):
-        return {'image_url': self.page.specific.image.get_rendition('min-1400x1400').file.url, }
+        return {
+            'image_url': self.page.specific.image.get_rendition('min-1400x1400').file.url,
+            'feed_locked': self.feed_locked(),
+            }
 
     def item_extra_kwargs(self, item):
         return {'image_url': item.specific.image.get_rendition('min-1400x1400').file.url, }
@@ -81,10 +91,18 @@ class PodFeed(Feed):
         except AttributeError:
             return 'Copyright (c) ' + str(self.page.go_live_at.year) + ', ' + self.page.owner.get_full_name()
 
+    def feed_locked(self):
+        try:
+            if self.page.specific.feed_locked:
+                return 'yes'
+            else:
+                return 'no'
+        except AttributeError:
+            return 'no'
+
     def items(self):
         return self.page.specific.index_page.get_descendants().live(
-            ).public().not_in_menu().filter(go_live_at__isnull=False).order_by(
-                            '-first_published_at')
+            ).public().order_by('-first_published_at')
 
     def item_title(self, item):
         return item.title
@@ -94,12 +112,12 @@ class PodFeed(Feed):
 
     def item_guid(self, item):
         return item.full_url
-    
+
     item_guid_is_permalink = True
 
     def item_author_name(self, item):
         return item.owner.get_full_name()
-        
+
     def item_author_email(self, item):
         return item.owner.email
 
@@ -123,7 +141,9 @@ class PodFeed(Feed):
 
     def item_enclosure_mime_type(self, item):
         try:
-            return item.specific.enclosure_mime_type
+            if item.specific.enclosure_mime_type:
+                return item.specific.enclosure_mime_type
+            return magic.from_buffer(item.specific.enclosure.file.read(), mime=True)
         except:
             return
 

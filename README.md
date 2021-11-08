@@ -14,7 +14,11 @@ wagtailmedia==0.7.1
 ```
 
 ## Installation ###
-  
+
+### libmagic ###
+
+> apt install libmagic
+
 ### Pip requirements ###
 
 > pip install -r requirements.txt

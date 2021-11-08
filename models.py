@@ -156,7 +156,7 @@ class PodCastBirdPage(Page, BirdMixin):
 
     def get_context(self, request):
         context = super().get_context(request)
-        all_posts = Page.objects.live().public().not_in_menu().exclude(
+        all_posts = Page.objects.live().public().exclude(
             pk=self.pk).filter(
                 content_type__model='podepisodebirdpage').order_by('-go_live_at').distinct()
         paginator = Paginator(all_posts, 10)
@@ -189,18 +189,22 @@ class PodCastFeedBirdPage(Page, BirdMixin):
     )
     tags = ClusterTaggableManager(through=PodCastFeedBirdPageTag, blank=True)
     feed_copyright = models.CharField(max_length=128, blank=True, null=True)
+    feed_locked = models.BooleanField(default=False)
+
     search_fields = Page.search_fields + BirdMixin.search_fields
     content_panels = Page.content_panels + BirdMixin.content_panels + [
         PageChooserPanel('index_page'),
         FieldPanel('language'),
-        FieldPanel('owner'),
         FieldPanel('author_link'),
         FieldPanel('feed_copyright'),
     ]
     promote_panels = Page.promote_panels + [
         FieldPanel('tags'),
         ]
-    settings_panels = Page.settings_panels + BirdMixin.settings_panels
+    settings_panels = Page.settings_panels + BirdMixin.settings_panels + [
+        FieldPanel('feed_locked'),
+        ]
+
 
     def serve(self, request):
         return PodFeed(self)(request)

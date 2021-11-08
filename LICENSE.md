@@ -1,7 +1,7 @@
 
 # License #
 
-Copyright (c) 2019-2020 Oscar Fröberg
+Copyright (c) 2019-2021 Oscar Fröberg
 
 [![Creative Commons License](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
