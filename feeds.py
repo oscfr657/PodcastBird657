@@ -28,6 +28,9 @@ class CustomRssFeedGenerator(Rss201rev2Feed):
         handler.addQuickElement(u"itunes:email", self.feed['author_email'])
         handler.endElement(u'itunes:owner')
 
+        handler.addQuickElement('itunes:author', self.feed['author_name'])
+        handler.addQuickElement('itunes:explicit', self.feed['explicit'])
+        
         handler.startElement(u'podcast', {})
         handler.addQuickElement(u'locked', self.feed['feed_locked'])
         handler.endElement(u'podcast')
@@ -41,6 +44,9 @@ class CustomRssFeedGenerator(Rss201rev2Feed):
         handler.addQuickElement(u"title", item['title'])
         handler.addQuickElement(u"link", item['link'])
         handler.endElement(u'image')
+
+        handler.addQuickElement('itunes:explicit', item['explicit'])
+        handler.addQuickElement('itunes:duration', item['duration'])
 
 
 class PodFeed(Feed):
@@ -61,10 +67,15 @@ class PodFeed(Feed):
             'image_url': self.page.index_page.specific.image.get_rendition('min-1400x1400').file.url,
             'feed_locked': self.feed_locked(),
             'guid': str(self.page.index_page.specific.guid),
+            'explicit': self.explicit(),
             }
 
     def item_extra_kwargs(self, item):
-        return {'image_url': item.specific.image.get_rendition('min-1400x1400').file.url, }
+        return {
+            'image_url': item.specific.image.get_rendition('min-1400x1400').file.url,
+            'explicit': self.item_explicit(item),
+            'duration': str(self.item_enclosure_length(item)),
+            }
 
     def description(self):
         rendered = render_to_string('podcastbird657/feed_description.html', { 'obj': self.page })
@@ -81,7 +92,10 @@ class PodFeed(Feed):
             return (self.page.index_page.specific.author_link) if self.page.index_page.specific.author_link else '/'
         except AttributeError:
             return '/'
-    
+
+    def explicit(self):
+        return 'yes' if self.page.index_page.specific.explicit else 'no'
+
     def categories(self):
         try:
             return [ tag.name for tag in self.page.index_page.tags.all() ]
@@ -158,6 +172,9 @@ class PodFeed(Feed):
     def item_updateddate(self, item):
         return item.last_published_at
 
+    def item_explicit(self, item):
+        return 'yes' if self.page.index_page.specific.explicit or item.specific.explicit else 'no'
+        
     def item_categories(self, item):
         try:
             return [ tag.name for tag in item.specific.tags.all() ]

@@ -17,11 +17,15 @@ wagtailmedia>=0.8.0
 
 ### libmagic ###
 
-> apt install libmagic
+``` bash
+apt install libmagic
+```
 
 ### Pip requirements ###
 
-> pip install -r requirements.txt
+``` bash
+pip install -r requirements.txt
+```
 
 ### Django settings ###
 
@@ -49,7 +53,6 @@ add to the INSTALLED_APPS
     # custom
     'podcastbird657',
     'wagtailmedia',
-
 ```
 
 add to the MIDDLEWARE settings
@@ -73,7 +76,7 @@ add to the TEMPLATES settings
 
 #### I recommend ####
 
-and set the WAGTAILIMAGES_FORMAT_CONVERSIONS setting
+set the WAGTAILIMAGES_FORMAT_CONVERSIONS setting
 
 ``` python
 WAGTAILIMAGES_FORMAT_CONVERSIONS = {
@@ -88,11 +91,15 @@ WAGTAILIMAGES_FORMAT_CONVERSIONS = {
 
 ### Database configuration ###
 
-> python3 manage.py migrate
+``` bash
+python3 manage.py migrate
+```
 
 ### Search Index setup ###
 
-> python3 manage.py update_index
+``` bash
+python3 manage.py update_index
+```
 
 ### Django url ###
 
@@ -123,29 +130,32 @@ urlpatterns += [
 
 ### Collectstatic ###
 
-> python manage.py collectstatic
+``` bash
+python manage.py collectstatic
+```
 
 ### [Management commands](https://docs.wagtail.io/en/stable/reference/management_commands.html) ###
 
 Some commands is good to have in cron to run once every hour.
 
-> crontab -e
-
-> 0 * * * * /path/to/env/bin/python3 /path/to/project/manage.py publish_scheduled_pages
-
-> 0 * * * * /path/to/env/bin/python3 /path/to/project/manage.py search_garbage_collect
-
-> crontab -l
+``` bash
+crontab -e
+0 * * * * /path/to/env/bin/python3 /path/to/project/manage.py publish_scheduled_pages
+0 * * * * /path/to/env/bin/python3 /path/to/project/manage.py search_garbage_collect
+crontab -l
+```
 
 ## For development ##
 
-> pip install pylint
+``` bash
+pip install pylint
+```
 
 To the Django settings.py add
 
 ``` python
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 ```
 
 To the Django project url.py add
@@ -158,9 +168,34 @@ from django.conf.urls.static import static
 and at the bottom of the file add
 
 ``` python
-
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 ```
+
+## TODO ##
+
+[RSS feed guidelines for Google Podcasts](https://support.google.com/podcast-publishers/answer/9889544)
+
+``` XML
+<itunes:category> - Example: <itunes:category text="Games &amp; Hobbies"/>
+```
+
+Recommended categories:
+
+- Arts
+- Business
+- Comedy
+- Education
+- Games &amp; Hobbies
+- Government &amp; Organizations
+- Health
+- Kids &amp; Family
+- Music
+- News &amp; Politics
+- Religion &amp; Spirituality
+- Science &amp; Medicine
+- Society &amp; Culture
+- Sports &amp; Recreation
+- TV &amp; Film
+- Technology

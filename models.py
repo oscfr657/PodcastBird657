@@ -108,6 +108,7 @@ class PodEpisodeBirdPage(Page, BirdMixin):
     )
     enclosure_length = models.IntegerField(blank=True, null=True)
     enclosure_mime_type = models.CharField(max_length=50, blank=True, null=True)
+    explicit = models.BooleanField(default=False)
     tags = ClusterTaggableManager(through=PodEpisodeBirdPageTag, blank=True)
     search_fields = Page.search_fields + BirdMixin.search_fields + [
         index.SearchField('body'),
@@ -121,7 +122,9 @@ class PodEpisodeBirdPage(Page, BirdMixin):
     promote_panels = Page.promote_panels + [
         FieldPanel('tags'),
         ]
-    settings_panels = Page.settings_panels + BirdMixin.settings_panels
+    settings_panels = Page.settings_panels + BirdMixin.settings_panels + [
+        FieldPanel('explicit'),
+        ]
 
     def get_sitemap_urls(self, request=None):
         if self.exclude_from_sitemap:
@@ -144,6 +147,7 @@ class PodCastBirdPage(Page, BirdMixin):
     author_link = models.URLField(blank=True, null=True)
     feed_copyright = models.CharField(max_length=128, blank=True, null=True)
     feed_locked = models.BooleanField(default=False)
+    explicit = models.BooleanField(default=False)
 
     tags = ClusterTaggableManager(through=PodCastBirdPageTag, blank=True)
     
@@ -159,6 +163,7 @@ class PodCastBirdPage(Page, BirdMixin):
         FieldPanel('show_coverImage'),
         FieldPanel('exclude_from_sitemap'),
         FieldPanel('feed_locked'),
+        FieldPanel('explicit'),
     ]
 
     def get_sitemap_urls(self, request=None):
