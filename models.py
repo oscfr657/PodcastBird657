@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
@@ -137,14 +139,26 @@ class PodCastBirdPageTag(TaggedItemBase):
 
 
 class PodCastBirdPage(Page, BirdMixin):
+    guid = models.UUIDField(default=uuid.uuid4, editable=False)
+    language = models.CharField(max_length=5, blank=True, null=True)
+    author_link = models.URLField(blank=True, null=True)
+    feed_copyright = models.CharField(max_length=128, blank=True, null=True)
+    feed_locked = models.BooleanField(default=False)
+
     tags = ClusterTaggableManager(through=PodCastBirdPageTag, blank=True)
+    
     search_fields = Page.search_fields + BirdMixin.search_fields
-    content_panels = Page.content_panels + BirdMixin.content_panels
-    promote_panels = Page.promote_panels + [ FieldPanel('tags'), ]
+    content_panels = Page.content_panels + BirdMixin.content_panels + [
+        FieldPanel('language'),
+        FieldPanel('author_link'),
+        FieldPanel('feed_copyright'),
+    ]
+    promote_panels = Page.promote_panels + [FieldPanel('tags'), ]
     settings_panels = Page.settings_panels + [
         FieldPanel('show_breadcrumbs'),
         FieldPanel('show_coverImage'),
         FieldPanel('exclude_from_sitemap'),
+        FieldPanel('feed_locked'),
     ]
 
     def get_sitemap_urls(self, request=None):
@@ -171,40 +185,15 @@ class PodCastBirdPage(Page, BirdMixin):
         return context
 
 
-class PodCastFeedBirdPageTag(TaggedItemBase):
-    content_object = ParentalKey(
-        'PodCastFeedBirdPage',
-        on_delete=models.CASCADE,
-        related_name='tagged_items')
-
-
-class PodCastFeedBirdPage(Page, BirdMixin):
-    language = models.CharField(max_length=5, blank=True, null=True)
-    author_link = models.URLField(blank=True, null=True)
+class PodCastFeedBirdPage(Page):
     index_page = models.ForeignKey(
         'wagtailcore.Page',
         null=True, blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
-    tags = ClusterTaggableManager(through=PodCastFeedBirdPageTag, blank=True)
-    feed_copyright = models.CharField(max_length=128, blank=True, null=True)
-    feed_locked = models.BooleanField(default=False)
 
-    search_fields = Page.search_fields + BirdMixin.search_fields
-    content_panels = Page.content_panels + BirdMixin.content_panels + [
-        PageChooserPanel('index_page'),
-        FieldPanel('language'),
-        FieldPanel('author_link'),
-        FieldPanel('feed_copyright'),
-    ]
-    promote_panels = Page.promote_panels + [
-        FieldPanel('tags'),
-        ]
-    settings_panels = Page.settings_panels + BirdMixin.settings_panels + [
-        FieldPanel('feed_locked'),
-        ]
-
+    content_panels = Page.content_panels + [PageChooserPanel('index_page'),]
 
     def serve(self, request):
         return PodFeed(self)(request)

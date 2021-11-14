@@ -32,6 +32,8 @@ class CustomRssFeedGenerator(Rss201rev2Feed):
         handler.addQuickElement(u'locked', self.feed['feed_locked'])
         handler.endElement(u'podcast')
 
+        handler.addQuickElement('podcast:guid', self.feed['guid'])
+
     def add_item_elements(self, handler, item):
         super(CustomRssFeedGenerator, self).add_item_elements(handler, item)
         handler.startElement(u'image', {})
@@ -50,14 +52,15 @@ class PodFeed(Feed):
         super(PodFeed, self).__init__()
         self.page = page
         self.title = page.title
-        self.link = page.specific.index_page.full_url
+        self.link = page.index_page.specific.full_url
         self.feed_url = page.full_url
-        self.language = str(page.specific.language) if page.specific.language else 'en'
+        self.language = str(page.index_page.specific.language) if page.index_page.specific.language else 'en'
 
     def feed_extra_kwargs(self, item):
         return {
-            'image_url': self.page.specific.image.get_rendition('min-1400x1400').file.url,
+            'image_url': self.page.index_page.specific.image.get_rendition('min-1400x1400').file.url,
             'feed_locked': self.feed_locked(),
+            'guid': str(self.page.index_page.specific.guid),
             }
 
     def item_extra_kwargs(self, item):
@@ -68,32 +71,32 @@ class PodFeed(Feed):
         return rendered
 
     def author_name(self):
-        return self.page.owner.get_full_name()
+        return self.page.index_page.owner.get_full_name()
     
     def author_email(self):
-        return self.page.owner.email
+        return self.page.index_page.owner.email
     
     def author_link(self):
         try:
-            return (self.page.specific.author_link) if self.page.specific.author_link else '/'
+            return (self.page.index_page.specific.author_link) if self.page.index_page.specific.author_link else '/'
         except AttributeError:
             return '/'
     
     def categories(self):
         try:
-            return [ tag.name for tag in self.page.specific.tags.all() ]
+            return [ tag.name for tag in self.page.index_page.tags.all() ]
         except AttributeError:
             return []
     
     def feed_copyright(self):
         try:
-            return self.page.specific.feed_copyright
+            return self.page.index_page.specific.feed_copyright
         except AttributeError:
-            return 'Copyright (c) ' + str(self.page.go_live_at.year) + ', ' + self.page.owner.get_full_name()
+            return 'Copyright (c) ' + str(self.page.index_page.go_live_at.year) + ', ' + self.page.index_page.owner.get_full_name()
 
     def feed_locked(self):
         try:
-            if self.page.specific.feed_locked:
+            if self.page.index_page.specific.feed_locked:
                 return 'yes'
             else:
                 return 'no'
@@ -101,7 +104,7 @@ class PodFeed(Feed):
             return 'no'
 
     def items(self):
-        return self.page.specific.index_page.get_descendants().live(
+        return self.page.index_page.get_descendants().live(
             ).public().order_by('-first_published_at')
 
     def item_title(self, item):
@@ -165,6 +168,6 @@ class PodFeed(Feed):
         try:
             return item.specific.feed_copyright
         except AttributeError:
-            return self.page.specific.feed_copyright
+            return self.page.index_page.specific.feed_copyright
         except:
             return 'Copyright (c) ' + str(item.first_published_at.year) + ', ' + item.owner.get_full_name()
