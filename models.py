@@ -57,7 +57,7 @@ class BirdMixin(models.Model):
             )
 
     show_breadcrumbs = models.BooleanField(default=False)
-    show_coverImage = models.BooleanField(default=False)
+    show_cover = models.BooleanField(default=False)
     show_date = models.BooleanField(default=False)
     exclude_from_sitemap = models.BooleanField(default=False)
 
@@ -74,7 +74,7 @@ class BirdMixin(models.Model):
     ]
     settings_panels = [
         FieldPanel('show_breadcrumbs'),
-        FieldPanel('show_coverImage'),
+        FieldPanel('show_cover'),
         FieldPanel('show_date'),
         FieldPanel('exclude_from_sitemap'),
     ]
@@ -160,7 +160,7 @@ class PodCastBirdPage(Page, BirdMixin):
     promote_panels = Page.promote_panels + [FieldPanel('tags'), ]
     settings_panels = Page.settings_panels + [
         FieldPanel('show_breadcrumbs'),
-        FieldPanel('show_coverImage'),
+        FieldPanel('show_cover'),
         FieldPanel('exclude_from_sitemap'),
         FieldPanel('feed_locked'),
         FieldPanel('explicit'),
@@ -197,9 +197,13 @@ class PodCastFeedBirdPage(Page):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    exclude_from_sitemap = models.BooleanField(default=False)
 
     content_panels = Page.content_panels + [PageChooserPanel('index_page'),]
-
+    settings_panels = Page.settings_panels + [
+        FieldPanel('exclude_from_sitemap'),
+    ]
+    
     def serve(self, request):
         return PodFeed(self)(request)
 
