@@ -10,6 +10,10 @@ setup.py
 ./views.py
 ./migrations/0001_initial.py
 ./migrations/0002_auto_20210808_1619.py
+./migrations/0003_auto_20211113_1659.py
+./migrations/0004_auto_20211114_1706.py
+./migrations/0005_auto_20220122_2325.py
+./migrations/0006_podcastfeedbirdpage_exclude_from_sitemap_and_more.py
 ./migrations/__init__.py
 ./static/css/podcastbird657/podcastbird.css
 ./static/img/podcastbird657/share/2021_Twitter_logo-black.png

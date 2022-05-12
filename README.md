@@ -199,3 +199,14 @@ Recommended categories:
 - Sports &amp; Recreation
 - TV &amp; Film
 - Technology
+
+### Build a new release ###
+
+``` bash
+    pip install black
+    black . --skip-string-normalization
+```
+
+``` python
+python3 -m build --sdist
+```
