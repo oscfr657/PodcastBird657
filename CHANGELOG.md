@@ -4,6 +4,10 @@
 
 ## commits ##
 
+### 19 Sep 2022 ###
+
+    Django 4 and Wagtail 4. Build 0.0.1a3.
+
 ### 13 Apr 2022 ###
 
     Build 0.0.1a2.

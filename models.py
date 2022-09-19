@@ -7,7 +7,7 @@ from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
 
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 
 from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel, PageChooserPanel)
 
@@ -26,7 +26,7 @@ from .feeds import PodFeed
 
 
 @register_setting
-class PodcastSettings(BaseSetting):
+class PodcastSettings(BaseSiteSetting):
     logo = models.ForeignKey(
         'wagtailimages.Image',
         blank=True, null=True,

@@ -8,9 +8,9 @@ A small podcast Wagtail app
 ### Tested with ###
 
 ``` Python
-django>=3.2.6
-wagtail>=2.14.2
-wagtailmedia>=0.8.0
+django==4.0.7
+wagtail==4.0.1
+wagtailmedia==0.11.0
 ```
 
 ## Installation ###
