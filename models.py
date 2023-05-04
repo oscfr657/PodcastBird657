@@ -3,17 +3,15 @@ import uuid
 from django.db import models
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
-from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
+from wagtail.models import Page
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
 
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 
-from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel, PageChooserPanel)
+from wagtail.admin.panels import (FieldPanel, PageChooserPanel)
 
 from wagtail.search import index
-
-from wagtail.images.edit_handlers import ImageChooserPanel
 
 from wagtailmedia.edit_handlers import MediaChooserPanel
 
@@ -35,7 +33,7 @@ class PodcastSettings(BaseSiteSetting):
         )
 
     panels = [
-        ImageChooserPanel('logo'),
+        FieldPanel('logo'),
     ]
 
 
@@ -69,7 +67,7 @@ class BirdMixin(models.Model):
     ]
     content_panels = [
         FieldPanel('owner'),
-        ImageChooserPanel('image'),
+        FieldPanel('image'),
         FieldPanel('intro', classname="full"),
     ]
     settings_panels = [
@@ -98,7 +96,11 @@ class PodEpisodeBirdPage(Page, BirdMixin):
                 'ol', 'ul', 'hr',
                 'link', 'document-link',
                 'blockquote', 'embed', 'image'])),
-    ], blank=True, null=True)
+    ], 
+    blank=True,
+    null=True,
+    use_json_field=True,
+    )
     enclosure = models.ForeignKey(
         'wagtailmedia.Media',
         null=True,
@@ -114,7 +116,7 @@ class PodEpisodeBirdPage(Page, BirdMixin):
         index.SearchField('body'),
     ]
     content_panels = Page.content_panels + BirdMixin.content_panels + [
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
         MediaChooserPanel('enclosure'),
         FieldPanel('enclosure_length'),
         FieldPanel('enclosure_mime_type'),

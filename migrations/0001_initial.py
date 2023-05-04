@@ -4,8 +4,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.contrib.taggit
 import modelcluster.fields
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             name='PodCastBirdPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('intro', wagtail.core.fields.RichTextField(blank=True, null=True)),
+                ('intro', wagtail.fields.RichTextField(blank=True, null=True)),
                 ('show_breadcrumbs', models.BooleanField(default=False)),
                 ('show_coverImage', models.BooleanField(default=False)),
                 ('show_date', models.BooleanField(default=False)),
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             name='PodCastFeedBirdPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('intro', wagtail.core.fields.RichTextField(blank=True, null=True)),
+                ('intro', wagtail.fields.RichTextField(blank=True, null=True)),
                 ('show_breadcrumbs', models.BooleanField(default=False)),
                 ('show_coverImage', models.BooleanField(default=False)),
                 ('show_date', models.BooleanField(default=False)),
@@ -60,12 +60,12 @@ class Migration(migrations.Migration):
             name='PodEpisodeBirdPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('intro', wagtail.core.fields.RichTextField(blank=True, null=True)),
+                ('intro', wagtail.fields.RichTextField(blank=True, null=True)),
                 ('show_breadcrumbs', models.BooleanField(default=False)),
                 ('show_coverImage', models.BooleanField(default=False)),
                 ('show_date', models.BooleanField(default=False)),
                 ('exclude_from_sitemap', models.BooleanField(default=False)),
-                ('body', wagtail.core.fields.StreamField([('paragraph', wagtail.core.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'superscript', 'subscript', 'strikethrough', 'ol', 'ul', 'hr', 'link', 'document-link', 'blockquote', 'embed', 'image'], null=True, required=False))], blank=True, null=True)),
+                ('body', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock(features=['h2', 'h3', 'h4', 'bold', 'italic', 'superscript', 'subscript', 'strikethrough', 'ol', 'ul', 'hr', 'link', 'document-link', 'blockquote', 'embed', 'image'], null=True, required=False))], blank=True, null=True)),
                 ('enclosure_length', models.IntegerField(blank=True, null=True)),
                 ('enclosure_mime_type', models.CharField(blank=True, max_length=50, null=True)),
                 ('enclosure', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailmedia.media')),

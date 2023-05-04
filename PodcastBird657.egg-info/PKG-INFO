@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: PodcastBird657
-Version: 0.0.1a3
+Version: 0.0.2a0
 Summary: A small podcast Wagtail app.
 Home-page: https://github.com/oscfr657/PodcastBird657
 Author: Oscar F
@@ -33,9 +33,9 @@ A small podcast Wagtail app
 ### Tested with ###
 
 ``` Python
-django==4.0.7
-wagtail==4.0.1
-wagtailmedia==0.11.0
+django==4.2.1 
+wagtail==5.0
+wagtailmedia==0.14.0
 ```
 
 ## Installation ###
@@ -43,7 +43,8 @@ wagtailmedia==0.11.0
 ### libmagic ###
 
 ``` bash
-apt install libmagic
+apt install python3-magic
+pip install python-magic
 ```
 
 ### Pip requirements ###
